@@ -1,4 +1,4 @@
-import EditorContainer from "./components/containers/editorContainer"
+import EditorContainer from "./components/containers/EditorContainer"
 
 
 
