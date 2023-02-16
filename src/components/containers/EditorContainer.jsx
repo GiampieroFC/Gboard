@@ -1,6 +1,5 @@
 import { useState } from "react"
 
-import TextBox from "../pures/TextBox"
 import { useEffect } from "react"
 
 
@@ -26,13 +25,15 @@ function EditorContainer() {
     useEffect(() => {
         handlerColor(color)
         handlerSize(size)
+        let cont = window.localStorage.getItem("content")
+        document.querySelector('textarea').value = cont
     }, [])
 
     function copy() {
         navigator.clipboard.writeText(document.querySelector('textarea').value)
     }
 
-    function download(params) {
+    function download() {
         const textToWrite = document.querySelector('textarea').value;
         const textFileAsBlob = new Blob([textToWrite], { type: 'text/plain' });
         const fileNameToSaveAs = "apuntes-clase-espanol.txt";
@@ -52,16 +53,26 @@ function EditorContainer() {
         document.querySelector('textarea').value = ''
     }
 
+    // function undo() {
+    //     console.log(
+    //         document.getElementsByTagName('textarea')
+    //     )
+    // }
+
+    function save() {
+
+        window.localStorage.setItem("content", document.querySelector('textarea').value)
+
+    }
+
     function handlerWheel(e) {
 
         if (e.deltaY < 0) {
             let size = parseInt(e.target.value) + 4
-            console.log(size)
             handlerSize(size)
         }
         if (e.deltaY > 0) {
             let size = parseInt(e.target.value) - 4
-            console.log(size)
             handlerSize(size)
         }
     }
@@ -79,10 +90,13 @@ function EditorContainer() {
                 />
                 <input type="color" value={color} onChange={e => handlerColor(e.target.value)} />
                 <button onClickCapture={copy}>Copy</button>
-                <button onClickCapture={download}>Download</button>
+                <button onClickCapture={save}>Save</button>
                 <button onClickCapture={clean}>Clean</button>
+                <button onClickCapture={download}>Download</button>
+                {/* <button onClickCapture={undo}>Undo</button> */}
+                {/* <button onClickCapture={redo}>Redo</button> */}
             </div>
-            <TextBox dfv={"\n"} />
+            <textarea onChange={save} autoFocus="on" autoCorrect="on" spellCheck wrap="hard" />
         </>
     )
 }
