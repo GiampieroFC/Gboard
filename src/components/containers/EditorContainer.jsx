@@ -164,7 +164,7 @@ function EditorContainer() {
                 <button className="controls" onClickCapture={download}>Download</button>
             </div>
             <textarea
-                onBlur={save}
+                onChange={save}
                 autoFocus="on"
                 autoCorrect="on"
                 spellCheck
