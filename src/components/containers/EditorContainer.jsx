@@ -42,6 +42,8 @@ function EditorContainer() {
         }
         if (colorStorage) {
             handlerColor(colorStorage)
+        } else {
+            handlerColor(color)
         }
         if (fontSizeStorage) {
             handlerFontSize(fontSizeStorage)
