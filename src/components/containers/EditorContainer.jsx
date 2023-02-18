@@ -1,7 +1,10 @@
 import { useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux";
 import { changeColor, changeFontSize, changeFont } from "../../features/textBox/textBoxSlice.js";
+import JSConfetti from "js-confetti";
 
+let nInter
+const jsConfetti = new JSConfetti()
 function EditorContainer() {
 
     const { color, fontSize, font } = useSelector((state) => state.textBox)
@@ -114,6 +117,28 @@ function EditorContainer() {
         }
     }
 
+
+    function handlerParty(e) {
+
+        if (e.target.checked) {
+            nInter = setInterval(() => {
+                jsConfetti.addConfetti({
+                    emojis: ['🎉', '🥳', '👍', document.querySelector('#student').value],
+                    emojiSize: 25,
+                    confettiNumber: 5
+                })
+
+                const genRanHex = () => [...Array(6)].map(() => Math.floor(Math.random() * 16).toString(16)).join('');
+                handlerColor(`#${genRanHex()}`)
+            }, 300)
+
+        } else {
+            jsConfetti.clearCanvas()
+            clearInterval(nInter)
+        }
+
+    }
+
     return (
         <>
             <div className="controlsContainer">
@@ -151,11 +176,18 @@ function EditorContainer() {
                     <option value='cursive'>cursive</option>
                 </select>
 
-                <button className="controls" onClickCapture={copy}>Copy</button>
+                <span>
+                    <input type="checkbox" name="party" id="party" onClick={(e) => handlerParty(e)} />
+                    <label htmlFor="party">🥳🎉</label>
+                </span>
 
-                <button className="controls" onClickCapture={save}>Save</button>
 
-                <button className="controls" onClickCapture={clean}>Clean</button>
+
+                <button className="controls" onClick={copy}>Copy</button>
+
+                <button className="controls" onClick={save}>Save</button>
+
+                <button className="controls" onClick={clean}>Clean</button>
 
                 <select onChange={(e) => window.localStorage.setItem('format', e.target.value)} className="controls" name="format" id="format">
                     <option value=".txt">.txt</option>
@@ -165,7 +197,7 @@ function EditorContainer() {
                     <option value=".xml">.xml</option>
                 </select>
 
-                <button className="controls" onClickCapture={download}>Download</button>
+                <button className="controls" onClick={download}>Download</button>
             </div>
             <textarea
                 onChange={save}

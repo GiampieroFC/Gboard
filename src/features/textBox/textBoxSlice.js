@@ -6,7 +6,7 @@ const initialState = {
     font: '"Lucida Console", Courier, monospace',
     // textContent: '', 👇 guardarlo en el localStorage
     // format: '.txt', 
-    // student: '', 
+    // student: '',
 }
 
 export const textBoxSlice = createSlice({
@@ -15,7 +15,8 @@ export const textBoxSlice = createSlice({
     reducers: {
         changeColor: (state, color) => { state.color = color.payload },
         changeFontSize: (state, size) => { state.fontSize = size.payload },
-        changeFont: (state, font) => { state.font = font.payload }
+        changeFont: (state, font) => { state.font = font.payload },
+        // changeParty: (state) => { state.party = !state.party }
     }
 })
 
