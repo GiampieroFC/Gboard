@@ -1,32 +1,58 @@
-import { useState } from "react"
-
 import { useEffect } from "react"
-
-
-
+import { useSelector, useDispatch } from "react-redux";
+import { changeColor, changeFontSize, changeFont } from "../../features/textBox/textBoxSlice.js";
 
 function EditorContainer() {
 
-    const [color, setColor] = useState("#00ff00")
-    const [size, setSize] = useState("18")
+    const { color, fontSize, font } = useSelector((state) => state.textBox)
+
+    const dispatch = useDispatch()
 
     function handlerColor(color) {
-        setColor(color)
-        document.getElementsByTagName('textarea')[0].style.textShadow = `0px 0px 15px ${color}`
+        dispatch(changeColor(color))
+        window.localStorage.setItem('color', color)
+        document.getElementsByTagName('textarea')[0].style.textShadow = `0px 0px 9px ${color}`
         document.getElementsByTagName('textarea')[0].style.color = color
     }
-    function handlerSize(size) {
 
-        setSize(size)
-        document.getElementsByTagName('textarea')[0].style.fontSize = `${size}px`
-
+    function handlerFontSize(fontSize) {
+        dispatch(changeFontSize(fontSize))
+        window.localStorage.setItem('fontSize', fontSize)
+        document.getElementsByTagName('textarea')[0].style.fontSize = `${fontSize}px`
     }
 
+    function handlerFont(font) {
+        dispatch(changeFont(font))
+        window.localStorage.setItem('font', font)
+        document.getElementsByTagName('textarea')[0].style.fontFamily = `${font}`
+    }
+
+
     useEffect(() => {
-        handlerColor(color)
-        handlerSize(size)
-        let cont = window.localStorage.getItem("content")
-        document.querySelector('textarea').value = cont
+        const textContentStorage = window.localStorage.getItem('textContent')
+
+        const colorStorage = window.localStorage.getItem('color')
+        const fontSizeStorage = window.localStorage.getItem('fontSize')
+        const fontStorage = window.localStorage.getItem('font')
+        const studentStorage = window.localStorage.getItem('student')
+
+
+        if (textContentStorage) {
+            document.querySelector('textarea').value = textContentStorage;
+        }
+        if (colorStorage) {
+            handlerColor(colorStorage)
+        }
+        if (fontSizeStorage) {
+            handlerFontSize(fontSizeStorage)
+        }
+        if (fontStorage) {
+            handlerFont(fontStorage)
+        }
+        if (studentStorage) {
+            document.querySelector('#student').value = studentStorage;
+        }
+
     }, [])
 
     function copy() {
@@ -34,9 +60,22 @@ function EditorContainer() {
     }
 
     function download() {
+        let date = new Date(Date.now()).toISOString().split('T')[0]
+        const format = document.querySelector('#format').value
+
+        const rgx = /[a-z0-9 -]*/ig
+        const student = document.querySelector('#student')
+            .value
+            .match(rgx)
+            .join('')
+            .toLowerCase()
+            .replace(/\s{1,}|-{1,}/g, ' ')
+            .trim()
+            .replace(/\s{1,}|-{1,}/g, '-')
+
         const textToWrite = document.querySelector('textarea').value;
         const textFileAsBlob = new Blob([textToWrite], { type: 'text/plain' });
-        const fileNameToSaveAs = "apuntes-clase-espanol.txt";
+        const fileNameToSaveAs = `${date}-${student || 'apuntes'}${format}`;
         const downloadLink = document.createElement("a");
 
         downloadLink.download = fileNameToSaveAs;
@@ -53,50 +92,82 @@ function EditorContainer() {
         document.querySelector('textarea').value = ''
     }
 
-    // function undo() {
-    //     console.log(
-    //         document.getElementsByTagName('textarea')
-    //     )
-    // }
-
     function save() {
-
-        window.localStorage.setItem("content", document.querySelector('textarea').value)
-
+        window.localStorage.setItem("textContent", document.querySelector('textarea').value)
     }
 
     function handlerWheel(e) {
-
         if (e.deltaY < 0) {
-            let size = parseInt(e.target.value) + 4
-            handlerSize(size)
+            let fontSize = parseInt(e.target.value) + 4
+            handlerFontSize(fontSize)
         }
         if (e.deltaY > 0) {
-            let size = parseInt(e.target.value) - 4
-            handlerSize(size)
+            let fontSize = parseInt(e.target.value) - 4
+            fontSize < 8 ? fontSize = 8 : fontSize
+            handlerFontSize(fontSize)
         }
     }
 
-
     return (
         <>
-            <div className="controls">
-                <input type="range"
+            <div className="controlsContainer">
+
+                <input className="controls"
+                    type="text"
+                    name="student"
+                    id="student"
+                    autoComplete="on"
+                    onChange={(e) => window.localStorage.setItem('student', e.target.value)}
+                />
+
+                <input className="controls"
+                    type="range"
                     min="8" max="200"
                     step="1"
                     onWheel={handlerWheel}
-                    value={size}
-                    onChange={e => handlerSize(e.target.value)}
+                    value={fontSize}
+                    onChange={e => handlerFontSize(e.target.value)}
                 />
-                <input type="color" value={color} onChange={e => handlerColor(e.target.value)} />
-                <button onClickCapture={copy}>Copy</button>
-                <button onClickCapture={save}>Save</button>
-                <button onClickCapture={clean}>Clean</button>
-                <button onClickCapture={download}>Download</button>
-                {/* <button onClickCapture={undo}>Undo</button> */}
-                {/* <button onClickCapture={redo}>Redo</button> */}
+
+                <input className="controls"
+                    type="color"
+                    id="color"
+                    value={color}
+                    onChange={(e => handlerColor(e.target.value))}
+                />
+
+                <select className="controls" value={font} onChange={(e) => handlerFont(e.target.value)} name="font" id="font">
+                    <option value='"Lucida Console", Courier, monospace'>"Lucida Console", Courier, monospace</option>
+                    <option value='math'>math</option>
+                    <option value='fantasy'>fantasy</option>
+                    <option value='emoji'>emoji</option>
+                    <option value='Verdana, Arial, Helvetica, sans-serif'>Verdana, Arial, Helvetica, sans-serif</option>
+                    <option value='cursive'>cursive</option>
+                </select>
+
+                <button className="controls" onClickCapture={copy}>Copy</button>
+
+                <button className="controls" onClickCapture={save}>Save</button>
+
+                <button className="controls" onClickCapture={clean}>Clean</button>
+
+                <select className="controls" name="format" id="format">
+                    <option value=".txt">.txt</option>
+                    <option value=".csv">.csv</option>
+                    <option value=".json">.json</option>
+                    <option value=".html">.html</option>
+                    <option value=".xml">.xml</option>
+                </select>
+
+                <button className="controls" onClickCapture={download}>Download</button>
             </div>
-            <textarea onChange={save} autoFocus="on" autoCorrect="on" spellCheck wrap="hard" />
+            <textarea
+                onBlur={save}
+                autoFocus="on"
+                autoCorrect="on"
+                spellCheck
+                wrap="hard"
+            />
         </>
     )
 }
