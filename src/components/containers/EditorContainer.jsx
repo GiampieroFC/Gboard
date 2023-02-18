@@ -35,15 +35,17 @@ function EditorContainer() {
         const fontSizeStorage = window.localStorage.getItem('fontSize')
         const fontStorage = window.localStorage.getItem('font')
         const studentStorage = window.localStorage.getItem('student')
+        const formatStorage = window.localStorage.getItem('format')
 
 
         if (textContentStorage) {
             document.querySelector('textarea').value = textContentStorage;
         }
-        if (colorStorage) {
-            handlerColor(colorStorage)
-        } else {
-            handlerColor(color)
+        if (studentStorage) {
+            document.querySelector('#student').value = studentStorage;
+        }
+        if (formatStorage) {
+            document.querySelector('#format').value = formatStorage
         }
         if (fontSizeStorage) {
             handlerFontSize(fontSizeStorage)
@@ -51,8 +53,10 @@ function EditorContainer() {
         if (fontStorage) {
             handlerFont(fontStorage)
         }
-        if (studentStorage) {
-            document.querySelector('#student').value = studentStorage;
+        if (colorStorage) {
+            handlerColor(colorStorage)
+        } else {
+            handlerColor(color)
         }
 
     }, [])
@@ -153,7 +157,7 @@ function EditorContainer() {
 
                 <button className="controls" onClickCapture={clean}>Clean</button>
 
-                <select className="controls" name="format" id="format">
+                <select onChange={(e) => window.localStorage.setItem('format', e.target.value)} className="controls" name="format" id="format">
                     <option value=".txt">.txt</option>
                     <option value=".csv">.csv</option>
                     <option value=".json">.json</option>
