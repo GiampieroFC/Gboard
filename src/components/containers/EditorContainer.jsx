@@ -144,8 +144,7 @@ function EditorContainer() {
                 })
 
                 const genRanHex = () => [...Array(6)].map(() => Math.floor(Math.random() * 16).toString(16)).join('');
-                const genRanGlow = () => Math.floor(Math.random() * 300).toString()
-                handlerColorGlow(`#${genRanHex()}`, genRanGlow())
+                handlerColorGlow(`#${genRanHex()}`, 100)
             }, 300)
 
         } else {
