@@ -194,6 +194,7 @@ function EditorContainer() {
 
                 <select onChange={(e) => window.localStorage.setItem('format', e.target.value)} className="controls" name="format" id="format">
                     <option value=".txt">.txt</option>
+                    <option value=".md">.md</option>
                     <option value=".csv">.csv</option>
                     <option value=".json">.json</option>
                     <option value=".html">.html</option>
