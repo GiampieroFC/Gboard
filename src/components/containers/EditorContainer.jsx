@@ -155,7 +155,7 @@ function EditorContainer() {
                 />
 
                 <input className="controls"
-                    type="range"
+                    type="number"
                     min="8" max="200"
                     step="1"
                     onWheel={handlerWheel}
