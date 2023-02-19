@@ -99,10 +99,6 @@ function EditorContainer() {
         downloadLink.click();
     }
 
-    function clean() {
-        localStorage.clear()
-        window.location.reload()
-    }
 
     function save() {
         window.localStorage.setItem("textContent", document.querySelector('textarea').value)
@@ -140,6 +136,12 @@ function EditorContainer() {
             clearInterval(nInter)
         }
 
+    }
+
+    function clean() {
+        clearInterval(nInter)
+        localStorage.clear()
+        window.location.reload()
     }
 
     return (
@@ -208,6 +210,7 @@ function EditorContainer() {
                 autoFocus="on"
                 autoCorrect="on"
                 spellCheck
+                autoCapitalize="sentences"
                 wrap="hard"
             />
         </>
