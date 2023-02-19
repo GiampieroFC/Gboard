@@ -52,6 +52,8 @@ function EditorContainer() {
         }
         if (fontSizeStorage) {
             handlerFontSize(fontSizeStorage)
+        } else {
+            handlerFontSize(fontSize)
         }
         if (fontStorage) {
             handlerFont(fontStorage)
