@@ -138,7 +138,7 @@ function EditorContainer() {
         if (e.target.checked) {
             nInter = setInterval(() => {
                 jsConfetti.addConfetti({
-                    emojis: ['🎉', '🥳', '👍', document.querySelector('#student').value],
+                    emojis: ['🤓', '👍', document.querySelector('#student').value],
                     emojiSize: 25,
                     confettiNumber: 5,
                 })
@@ -148,8 +148,10 @@ function EditorContainer() {
             }, 300)
 
         } else {
-            jsConfetti.clearCanvas()
             clearInterval(nInter)
+            jsConfetti.clearCanvas()
+            handlerColorGlow(color, 0)
+
         }
 
     }
