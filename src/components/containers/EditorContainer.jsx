@@ -1,20 +1,22 @@
 import { useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux";
-import { changeColor, changeFontSize, changeFont } from "../../features/textBox/textBoxSlice.js";
+import { changeColor, changeFontSize, changeFont, changeGlow } from "../../features/textBox/textBoxSlice.js";
 import JSConfetti from "js-confetti";
 
 let nInter
 const jsConfetti = new JSConfetti()
 function EditorContainer() {
 
-    const { color, fontSize, font } = useSelector((state) => state.textBox)
+    const { color, fontSize, font, glow } = useSelector((state) => state.textBox)
 
     const dispatch = useDispatch()
 
-    function handlerColor(color) {
+    function handlerColorGlow(color, glow) {
         dispatch(changeColor(color))
+        dispatch(changeGlow(glow))
         window.localStorage.setItem('color', color)
-        document.getElementsByTagName('textarea')[0].style.textShadow = `0px 0px 9px ${color}`
+        window.localStorage.setItem('glow', glow)
+        document.getElementsByTagName('textarea')[0].style.textShadow = `0px 0px ${glow}px ${color}`
         document.getElementsByTagName('textarea')[0].style.color = color
     }
 
@@ -35,6 +37,7 @@ function EditorContainer() {
         const textContentStorage = window.localStorage.getItem('textContent')
 
         const colorStorage = window.localStorage.getItem('color')
+        const glowStorage = window.localStorage.getItem('glow')
         const fontSizeStorage = window.localStorage.getItem('fontSize')
         const fontStorage = window.localStorage.getItem('font')
         const studentStorage = window.localStorage.getItem('student')
@@ -59,10 +62,11 @@ function EditorContainer() {
             handlerFont(fontStorage)
         }
         if (colorStorage) {
-            handlerColor(colorStorage)
+            handlerColorGlow(colorStorage, glowStorage)
         } else {
-            handlerColor(color)
+            handlerColorGlow(color, glow)
         }
+
 
     }, [])
 
@@ -104,7 +108,7 @@ function EditorContainer() {
         window.localStorage.setItem("textContent", document.querySelector('textarea').value)
     }
 
-    function handlerWheel(e) {
+    function handlerWheelFontSize(e) {
         if (e.deltaY < 0) {
             let fontSize = parseInt(e.target.value) + 4
             handlerFontSize(fontSize)
@@ -113,6 +117,18 @@ function EditorContainer() {
             let fontSize = parseInt(e.target.value) - 4
             fontSize < 8 ? fontSize = 8 : fontSize
             handlerFontSize(fontSize)
+        }
+    }
+    function handlerWheelGlow(e) {
+        if (e.deltaY < 0) {
+            let glow = parseInt(e.target.value) + 2
+            glow > 100 ? glow = 100 : glow
+            handlerColorGlow(color, glow)
+        }
+        if (e.deltaY > 0) {
+            let glow = parseInt(e.target.value) - 2
+            glow < 0 ? glow = 0 : glow
+            handlerColorGlow(color, glow)
         }
     }
 
@@ -158,9 +174,9 @@ function EditorContainer() {
 
                 <input className="controls"
                     type="number"
-                    min="8" max="200"
+                    min="8"
                     step="1"
-                    onWheel={handlerWheel}
+                    onWheel={handlerWheelFontSize}
                     value={fontSize}
                     onChange={e => handlerFontSize(e.target.value)}
                 />
@@ -169,7 +185,15 @@ function EditorContainer() {
                     type="color"
                     id="color"
                     value={color}
-                    onChange={(e => handlerColor(e.target.value))}
+                    onChange={(e => handlerColorGlow(e.target.value, glow))}
+                />
+                <input className="controls"
+                    type="number"
+                    min="0"
+                    max="100"
+                    onWheel={handlerWheelGlow}
+                    value={glow}
+                    onChange={e => handlerColorGlow(color, e.target.value)}
                 />
 
                 <select className="controls" value={font} onChange={(e) => handlerFont(e.target.value)} name="font" id="font">

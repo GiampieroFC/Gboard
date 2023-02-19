@@ -4,6 +4,7 @@ const initialState = {
     color: '#00ff00',
     fontSize: '18',
     font: '"Lucida Console", Courier, monospace',
+    glow: '9'
     // textContent: '', 👇 guardarlo en el localStorage
     // format: '.txt', 
     // student: '',
@@ -16,10 +17,10 @@ export const textBoxSlice = createSlice({
         changeColor: (state, color) => { state.color = color.payload },
         changeFontSize: (state, size) => { state.fontSize = size.payload },
         changeFont: (state, font) => { state.font = font.payload },
-        // changeParty: (state) => { state.party = !state.party }
+        changeGlow: (state, glow) => { state.glow = glow.payload }
     }
 })
 
-export const { changeColor, changeFontSize, changeFont } = textBoxSlice.actions
+export const { changeColor, changeFontSize, changeFont, changeGlow } = textBoxSlice.actions
 
 export default textBoxSlice.reducer
