@@ -98,7 +98,8 @@ function EditorContainer() {
     }
 
     function clean() {
-        document.querySelector('textarea').value = ''
+        localStorage.clear()
+        window.location.reload()
     }
 
     function save() {
@@ -125,7 +126,7 @@ function EditorContainer() {
                 jsConfetti.addConfetti({
                     emojis: ['🎉', '🥳', '👍', document.querySelector('#student').value],
                     emojiSize: 25,
-                    confettiNumber: 5
+                    confettiNumber: 5,
                 })
 
                 const genRanHex = () => [...Array(6)].map(() => Math.floor(Math.random() * 16).toString(16)).join('');
