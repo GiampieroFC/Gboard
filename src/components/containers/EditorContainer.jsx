@@ -60,6 +60,8 @@ function EditorContainer() {
         }
         if (fontStorage) {
             handlerFont(fontStorage)
+        } else {
+            handlerFont(font)
         }
         if (colorStorage) {
             handlerColorGlow(colorStorage, glowStorage)
