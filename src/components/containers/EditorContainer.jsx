@@ -138,19 +138,22 @@ function EditorContainer() {
         if (e.target.checked) {
             nInter = setInterval(() => {
                 jsConfetti.addConfetti({
-                    emojis: ['🤓', '👍', document.querySelector('#student').value],
-                    emojiSize: 25,
-                    confettiNumber: 5,
+                    emojis: ['🤓', '📖', '💃', '🕺', '🎉', '🥳'],
+                    emojiSize: 40,
+                    confettiNumber: 1,
                 })
 
                 const genRanHex = () => [...Array(6)].map(() => Math.floor(Math.random() * 16).toString(16)).join('');
-                handlerColorGlow(`#${genRanHex()}`, 100)
-            }, 300)
+                ((genRanHex) => {
+                    document.getElementsByTagName('textarea')[0].style.textShadow = `0px 0px ${100}px #${genRanHex}`
+                    document.getElementsByTagName('textarea')[0].style.color = `#${genRanHex}`
+                })(genRanHex())
+            }, 250)
 
         } else {
             clearInterval(nInter)
             jsConfetti.clearCanvas()
-            handlerColorGlow(color, 0)
+            handlerColorGlow(color, glow)
 
         }
 
@@ -199,7 +202,7 @@ function EditorContainer() {
                 />
 
                 <select className="controls" value={font} onChange={(e) => handlerFont(e.target.value)} name="font" id="font">
-                    <option value='"Lucida Console", Courier, monospace'>"Lucida Console", Courier, monospace</option>
+                    <option value='Courier New, Courier, Lucida Sans Typewriter, Lucida Typewriter, monospace'>Courier New, Courier, Lucida Sans Typewriter, Lucida Typewriter, monospace</option>
                     <option value='math'>math</option>
                     <option value='fantasy'>fantasy</option>
                     <option value='emoji'>emoji</option>

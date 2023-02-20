@@ -3,8 +3,8 @@ import { createSlice } from '@reduxjs/toolkit'
 const initialState = {
     color: '#00ff00',
     fontSize: '18',
-    font: '"Lucida Console", Courier, monospace',
-    glow: '9'
+    font: 'Courier New, Courier, Lucida Sans Typewriter, Lucida Typewriter, monospace',
+    glow: '6'
     // textContent: '', 👇 guardarlo en el localStorage
     // format: '.txt', 
     // student: '',
