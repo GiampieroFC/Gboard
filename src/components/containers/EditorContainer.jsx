@@ -179,6 +179,7 @@ function EditorContainer() {
 
                 <input className="controls"
                     type="number"
+                    id="fontSize"
                     min="8"
                     step="1"
                     onWheel={handlerWheelFontSize}
@@ -194,6 +195,7 @@ function EditorContainer() {
                 />
                 <input className="controls"
                     type="number"
+                    id="glow"
                     min="0"
                     max="100"
                     onWheel={handlerWheelGlow}

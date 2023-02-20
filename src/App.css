@@ -23,6 +23,7 @@ body {
     border-radius: 0.8rem;
     margin: 0.2rem;
     padding: 0.2rem;
+    border: transparent;
 }
 
 textarea {
@@ -33,4 +34,19 @@ textarea {
     font-size: 3rem;
     resize: none;
     border-radius: 1rem;
+}
+
+#font,
+#student {
+    width: 9rem;
+}
+
+#fontSize,
+#glow {
+    width: 3rem;
+}
+
+#color {
+    width: 3rem;
+    padding: 2px;
 }
