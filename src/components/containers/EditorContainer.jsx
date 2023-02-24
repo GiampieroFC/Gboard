@@ -162,9 +162,9 @@ function EditorContainer() {
     }
 
     function clean() {
-        clearInterval(nInter)
-        localStorage.clear()
-        window.location.reload()
+        clearInterval(nInter);
+        document.querySelector('textarea').value = '';
+        document.querySelector('#student').value = '';
     }
 
     return (
