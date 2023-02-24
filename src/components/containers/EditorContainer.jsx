@@ -163,6 +163,7 @@ function EditorContainer() {
 
     function clean() {
         clearInterval(nInter);
+        document.querySelector('#party').checked = false
         document.querySelector('textarea').value = '';
         document.querySelector('#student').value = '';
     }
