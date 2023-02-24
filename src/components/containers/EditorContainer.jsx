@@ -107,6 +107,7 @@ function EditorContainer() {
 
 
     function save() {
+        window.localStorage.setItem("student", document.querySelector('#student').value)
         window.localStorage.setItem("textContent", document.querySelector('textarea').value)
     }
 
