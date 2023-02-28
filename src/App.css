@@ -67,3 +67,13 @@ label {
     width: 3rem;
     padding: 2px;
 }
+
+textarea::-webkit-scrollbar {
+    width: .3em;
+}
+
+textarea::-webkit-scrollbar-thumb {
+    background-color: darkgrey;
+    outline: 1px solid slategrey;
+    border-radius: 1em;
+}
