@@ -1,13 +1,21 @@
-import { useEffect } from "react"
+import { useEffect, useRef } from "react"
 import { useSelector, useDispatch } from "react-redux";
 import { changeColor, changeFontSize, changeFont, changeGlow } from "../../features/textBox/textBoxSlice.js";
 import JSConfetti from "js-confetti";
 
-let nInter
 const jsConfetti = new JSConfetti()
+
 function EditorContainer() {
 
     const { color, fontSize, font, glow } = useSelector((state) => state.textBox)
+    const textareaRef = useRef()
+    const studentRef = useRef()
+    const formatRef = useRef()
+    const partyRef = useRef()
+    const nInter = useRef(0)
+    // const first = useRef(second)
+    // const first = useRef(second)
+    // const first = useRef(second)
 
     const dispatch = useDispatch()
 
@@ -16,20 +24,20 @@ function EditorContainer() {
         dispatch(changeGlow(glow))
         window.localStorage.setItem('color', color)
         window.localStorage.setItem('glow', glow)
-        document.getElementsByTagName('textarea')[0].style.textShadow = `0px 0px ${glow}px ${color}`
-        document.getElementsByTagName('textarea')[0].style.color = color
+        textareaRef.current.style.textShadow = `0px 0px ${glow}px ${color}`
+        textareaRef.current.style.color = color
     }
 
     function handlerFontSize(fontSize) {
         dispatch(changeFontSize(fontSize))
         window.localStorage.setItem('fontSize', fontSize)
-        document.getElementsByTagName('textarea')[0].style.fontSize = `${fontSize}px`
+        textareaRef.current.style.fontSize = `${fontSize}px`
     }
 
     function handlerFont(font) {
         dispatch(changeFont(font))
         window.localStorage.setItem('font', font)
-        document.getElementsByTagName('textarea')[0].style.fontFamily = `${font}`
+        textareaRef.current.style.fontFamily = `${font}`
     }
 
 
@@ -45,13 +53,13 @@ function EditorContainer() {
 
 
         if (textContentStorage) {
-            document.querySelector('textarea').value = textContentStorage;
+            textareaRef.current.value = textContentStorage;
         }
         if (studentStorage) {
-            document.querySelector('#student').value = studentStorage;
+            studentRef.current.value = studentStorage;
         }
         if (formatStorage) {
-            document.querySelector('#format').value = formatStorage
+            formatRef.current.value = formatStorage
         }
         if (fontSizeStorage) {
             handlerFontSize(fontSizeStorage)
@@ -73,16 +81,15 @@ function EditorContainer() {
     }, [])
 
     function copy() {
-        navigator.clipboard.writeText(document.querySelector('textarea').value)
+        navigator.clipboard.writeText(textareaRef.current.value)
     }
 
     function download() {
         let date = new Date(Date.now()).toISOString().split('T')[0]
-        const format = document.querySelector('#format').value
+        const format = formatRef.current.value
 
         const rgx = /[a-z0-9 -]*/ig
-        const student = document.querySelector('#student')
-            .value
+        const student = studentRef.current.value
             .match(rgx)
             .join('')
             .toLowerCase()
@@ -90,7 +97,7 @@ function EditorContainer() {
             .trim()
             .replace(/\s{1,}|-{1,}/g, '-')
 
-        const textToWrite = document.querySelector('textarea').value;
+        const textToWrite = textareaRef.current.value;
         const textFileAsBlob = new Blob([textToWrite], { type: 'text/plain' });
         const fileNameToSaveAs = `${date}-${student || 'apuntes'}${format}`;
         const downloadLink = document.createElement("a");
@@ -107,8 +114,8 @@ function EditorContainer() {
 
 
     function save() {
-        window.localStorage.setItem("student", document.querySelector('#student').value)
-        window.localStorage.setItem("textContent", document.querySelector('textarea').value)
+        window.localStorage.setItem("student", studentRef.current.value)
+        window.localStorage.setItem("textContent", textareaRef.current.value)
     }
 
     function handlerWheelFontSize(e) {
@@ -139,7 +146,7 @@ function EditorContainer() {
     function handlerParty(e) {
 
         if (e.target.checked) {
-            nInter = setInterval(() => {
+            nInter.current = setInterval(() => {
                 jsConfetti.addConfetti({
                     emojis: ['🤓', '📖', '💃', '🕺', '🎉', '🥳'],
                     emojiSize: 40,
@@ -148,13 +155,13 @@ function EditorContainer() {
 
                 const genRanHex = () => [...Array(6)].map(() => Math.floor(Math.random() * 16).toString(16)).join('');
                 ((genRanHex) => {
-                    document.getElementsByTagName('textarea')[0].style.textShadow = `0px 0px ${100}px #${genRanHex}`
-                    document.getElementsByTagName('textarea')[0].style.color = `#${genRanHex}`
+                    textareaRef.current.style.textShadow = `0px 0px ${100}px #${genRanHex}`
+                    textareaRef.current.style.color = `#${genRanHex}`
                 })(genRanHex())
             }, 250)
 
         } else {
-            clearInterval(nInter)
+            clearInterval(nInter.current)
             jsConfetti.clearCanvas()
             handlerColorGlow(color, glow)
 
@@ -164,9 +171,9 @@ function EditorContainer() {
 
     function clean() {
         clearInterval(nInter);
-        document.querySelector('#party').checked = false
-        document.querySelector('textarea').value = '';
-        document.querySelector('#student').value = '';
+        partyRef.current.checked = false
+        textareaRef.current.value = '';
+        studentRef.current.value = '';
     }
 
     return (
@@ -176,6 +183,7 @@ function EditorContainer() {
                 <input className="controls"
                     type="text"
                     name="student"
+                    ref={studentRef}
                     id="student"
                     autoComplete="on"
                     onChange={(e) => window.localStorage.setItem('student', e.target.value)}
@@ -183,10 +191,10 @@ function EditorContainer() {
 
                 <input className="controls"
                     type="number"
-                    id="fontSize"
                     min="8"
                     step="1"
                     onWheel={handlerWheelFontSize}
+                    id="fontSize"
                     value={fontSize}
                     onChange={e => handlerFontSize(e.target.value)}
                 />
@@ -199,15 +207,15 @@ function EditorContainer() {
                 />
                 <input className="controls"
                     type="number"
-                    id="glow"
                     min="0"
                     max="100"
                     onWheel={handlerWheelGlow}
+                    id="glow"
                     value={glow}
                     onChange={e => handlerColorGlow(color, e.target.value)}
                 />
 
-                <select className="controls" value={font} onChange={(e) => handlerFont(e.target.value)} name="font" id="font">
+                <select className="controls" value={font} onChange={(e) => handlerFont(e.target.value)} id="font" name="font">
                     <option value='Courier New, Courier, Lucida Sans Typewriter, Lucida Typewriter, monospace'>Courier New, Courier, Lucida Sans Typewriter, Lucida Typewriter, monospace</option>
                     <option value='math'>math</option>
                     <option value='fantasy'>fantasy</option>
@@ -217,7 +225,7 @@ function EditorContainer() {
                 </select>
 
                 <span>
-                    <input type="checkbox" name="party" id="party" onClick={(e) => handlerParty(e)} />
+                    <input type="checkbox" id="party" name="party" onClick={(e) => handlerParty(e)} />
                     <label htmlFor="party">🥳🎉</label>
                 </span>
 
@@ -229,7 +237,7 @@ function EditorContainer() {
 
                 <button className="controls" onClick={clean}>Clean</button>
 
-                <select onChange={(e) => window.localStorage.setItem('format', e.target.value)} className="controls" name="format" id="format">
+                <select onChange={(e) => window.localStorage.setItem('format', e.target.value)} className="controls" name="format" ref={formatRef}>
                     <option value=".txt">.txt</option>
                     <option value=".md">.md</option>
                     <option value=".csv">.csv</option>
@@ -241,6 +249,7 @@ function EditorContainer() {
                 <button className="controls" onClick={download}>Download</button>
             </div>
             <textarea
+                ref={textareaRef}
                 onChange={save}
                 autoFocus="on"
                 autoCorrect="on"
