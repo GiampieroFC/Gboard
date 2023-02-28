@@ -143,9 +143,9 @@ function EditorContainer() {
     }
 
 
-    function handlerParty(e) {
+    function handlerParty() {
 
-        if (e.target.checked) {
+        if (partyRef.current.checked) {
             nInter.current = setInterval(() => {
                 jsConfetti.addConfetti({
                     emojis: ['🤓', '📖', '💃', '🕺', '🎉', '🥳'],
@@ -170,7 +170,7 @@ function EditorContainer() {
     }
 
     function clean() {
-        clearInterval(nInter);
+        clearInterval(nInter.current);
         partyRef.current.checked = false
         textareaRef.current.value = '';
         studentRef.current.value = '';
@@ -225,7 +225,7 @@ function EditorContainer() {
                 </select>
 
                 <span>
-                    <input type="checkbox" id="party" name="party" onClick={(e) => handlerParty(e)} />
+                    <input type="checkbox" id="party" name="party" onClick={handlerParty} ref={partyRef} />
                     <label htmlFor="party">🥳🎉</label>
                 </span>
 
