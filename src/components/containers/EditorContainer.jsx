@@ -213,6 +213,7 @@ function EditorContainer() {
                         type="range"
                         min="0"
                         max="100"
+                        step="1"
                         onWheel={handlerWheelGlow}
                         id="glow"
                         value={glow}
