@@ -13,9 +13,6 @@ function EditorContainer() {
     const formatRef = useRef()
     const partyRef = useRef()
     const nInter = useRef(0)
-    // const first = useRef(second)
-    // const first = useRef(second)
-    // const first = useRef(second)
 
     const dispatch = useDispatch()
 
@@ -186,18 +183,22 @@ function EditorContainer() {
                     ref={studentRef}
                     id="student"
                     autoComplete="on"
+                    placeholder="Nombre del estudiante..."
                     onChange={(e) => window.localStorage.setItem('student', e.target.value)}
                 />
 
-                <input className="controls"
-                    type="number"
-                    min="8"
-                    step="1"
-                    onWheel={handlerWheelFontSize}
-                    id="fontSize"
-                    value={fontSize}
-                    onChange={e => handlerFontSize(e.target.value)}
-                />
+                <label htmlFor="fontSize">🔠
+                    <input className="controls"
+                        type="range"
+                        min="8"
+                        max="200"
+                        step="1"
+                        onWheel={handlerWheelFontSize}
+                        id="fontSize"
+                        value={fontSize}
+                        onChange={e => handlerFontSize(e.target.value)}
+                    /></label>
+
 
                 <input className="controls"
                     type="color"
@@ -205,15 +206,18 @@ function EditorContainer() {
                     value={color}
                     onChange={(e => handlerColorGlow(e.target.value, glow))}
                 />
-                <input className="controls"
-                    type="number"
-                    min="0"
-                    max="100"
-                    onWheel={handlerWheelGlow}
-                    id="glow"
-                    value={glow}
-                    onChange={e => handlerColorGlow(color, e.target.value)}
-                />
+
+
+                <label htmlFor="glow">🔆
+                    <input className="controls"
+                        type="range"
+                        min="0"
+                        max="100"
+                        onWheel={handlerWheelGlow}
+                        id="glow"
+                        value={glow}
+                        onChange={e => handlerColorGlow(color, e.target.value)}
+                    /></label>
 
                 <select className="controls" value={font} onChange={(e) => handlerFont(e.target.value)} id="font" name="font">
                     <option value='Courier New, Courier, Lucida Sans Typewriter, Lucida Typewriter, monospace'>Courier New, Courier, Lucida Sans Typewriter, Lucida Typewriter, monospace</option>

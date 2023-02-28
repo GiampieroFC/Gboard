@@ -36,12 +36,17 @@ textarea {
     border-radius: 1rem;
 }
 
+label {
+    color: whitesmoke;
+    font-size: x-large;
+}
+
 #font,
-#student {
+#student,
+#fontSize {
     width: 9rem;
 }
 
-#fontSize,
 #glow {
     width: 3rem;
 }
