@@ -7,7 +7,6 @@ const jsConfetti = new JSConfetti()
 
 function EditorContainer() {
 
-    console.log("App render")
 
     const { color, fontSize, font, glow } = useSelector((state) => state.textBox)
     const textareaRef = useRef()
@@ -21,6 +20,8 @@ function EditorContainer() {
     function handlerColorGlow(color, glow) {
         dispatch(changeColor(color))
         dispatch(changeGlow(glow))
+
+        console.log(glow)
         window.localStorage.setItem('color', color)
         window.localStorage.setItem('glow', glow)
         textareaRef.current.style.textShadow = `0px 0px ${glow}px ${color}`
@@ -42,7 +43,6 @@ function EditorContainer() {
 
     useEffect(() => {
 
-        console.log("useEffect render")
 
         const textContentStorage = window.localStorage.getItem('textContent')
 
@@ -134,7 +134,7 @@ function EditorContainer() {
     function handlerWheelGlow(e) {
         if (e.deltaY < 0) {
             let glow = parseInt(e.target.value) + 2
-            glow > 100 ? glow = 100 : glow
+            glow > 99 ? glow = 99 : glow
             handlerColorGlow(color, glow)
         }
         if (e.deltaY > 0) {
@@ -147,7 +147,6 @@ function EditorContainer() {
 
     const handlerParty = () => {
 
-        console.log("handlerParty render")
 
         if (partyRef.current.checked) {
             nInter.current = setInterval(() => {
@@ -183,7 +182,6 @@ function EditorContainer() {
 
     }
 
-    console.log(partyRef)
 
     return (
         <>
@@ -224,7 +222,7 @@ function EditorContainer() {
                     <input
                         type="range"
                         min="0"
-                        max="100"
+                        max="99"
                         step="1"
                         onWheel={handlerWheelGlow}
                         id="glow"
