@@ -1,32 +1,31 @@
 body {
-    background-color: black;
+    background-color: #111418;
 }
 
 .container {
-    background-color: rgba(255, 255, 255, 0.02);
     height: 97vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    border-radius: 2rem;
 }
 
 .controlsContainer {
     display: flex;
     width: 100%;
     justify-content: space-around;
+    align-items: center;
     flex-wrap: wrap;
-    margin-bottom: 12px;
+    margin-bottom: 0.5em;
+    gap: 0.5em;
 }
 
 .controls {
-    border-radius: 2em;
-    margin: 2px;
-    padding: .3em;
-    border: 1px solid whitesmoke;
-    background-color: rgba(255, 255, 255, 0.02);
+    padding: .5em;
+    background-color: transparent;
     color: whitesmoke;
+    outline: none;
+    border: none;
 }
 
 option {
@@ -35,45 +34,52 @@ option {
 
 
 .controls:hover {
-    background-color: rgba(255, 255, 255, 0.25);
+    border-radius: 15px;
+    background: linear-gradient(145deg, #12151a, #0f1216);
+    box-shadow: 2px 2px 3px #07080a,
+        -2px -2px 3px #1b2026;
 }
 
 textarea {
-    background-color: rgba(255, 255, 255, 0.02);
     height: 90%;
     width: 95%;
-    padding: 1rem;
-    font-size: 3rem;
     resize: none;
-    border-radius: 1rem;
+    background: transparent;
+    border-color: transparent;
+    border-radius: 15px;
 }
 
-label {
-    color: whitesmoke;
-    font-size: x-large;
+
+textarea:focus {
+    outline: none;
+    border-radius: 15px;
+    background: #111418;
+    box-shadow: 5px 5px 9px #0d0f12,
+        -5px -5px 9px #15191e;
+}
+
+textarea::-webkit-scrollbar {
+    width: .6rem;
+
+}
+
+textarea::-webkit-scrollbar- {
+    width: .6rem;
+
+}
+
+textarea::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.1);
+    outline: none;
+    border-radius: 15px;
 }
 
 #font,
 #student,
 #fontSize {
-    width: 9rem;
+    width: 6rem;
 }
 
 #glow {
     width: 3rem;
-}
-
-#color {
-    width: 3rem;
-    padding: 2px;
-}
-
-textarea::-webkit-scrollbar {
-    width: .3em;
-}
-
-textarea::-webkit-scrollbar-thumb {
-    background-color: darkgrey;
-    outline: 1px solid slategrey;
-    border-radius: 1em;
 }

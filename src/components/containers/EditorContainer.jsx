@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react"
+import { useEffect, useMemo, useRef } from "react"
 import { useSelector, useDispatch } from "react-redux";
 import { changeColor, changeFontSize, changeFont, changeGlow } from "../../features/textBox/textBoxSlice.js";
 import JSConfetti from "js-confetti";
@@ -6,6 +6,8 @@ import JSConfetti from "js-confetti";
 const jsConfetti = new JSConfetti()
 
 function EditorContainer() {
+
+    console.log("App render")
 
     const { color, fontSize, font, glow } = useSelector((state) => state.textBox)
     const textareaRef = useRef()
@@ -39,6 +41,9 @@ function EditorContainer() {
 
 
     useEffect(() => {
+
+        console.log("useEffect render")
+
         const textContentStorage = window.localStorage.getItem('textContent')
 
         const colorStorage = window.localStorage.getItem('color')
@@ -140,7 +145,9 @@ function EditorContainer() {
     }
 
 
-    function handlerParty() {
+    const handlerParty = () => {
+
+        console.log("handlerParty render")
 
         if (partyRef.current.checked) {
             nInter.current = setInterval(() => {
@@ -173,6 +180,8 @@ function EditorContainer() {
         studentRef.current.value = '';
     }
 
+    console.log(partyRef)
+
     return (
         <>
             <div className="controlsContainer">
@@ -187,8 +196,8 @@ function EditorContainer() {
                     onChange={(e) => window.localStorage.setItem('student', e.target.value)}
                 />
 
-                <label htmlFor="fontSize">🔠
-                    <input className="controls"
+                <label className="controls" htmlFor="fontSize">🔠
+                    <input
                         type="range"
                         min="8"
                         max="200"
@@ -208,8 +217,8 @@ function EditorContainer() {
                 />
 
 
-                <label htmlFor="glow">🔆
-                    <input className="controls"
+                <label className="controls" htmlFor="glow">🔆
+                    <input
                         type="range"
                         min="0"
                         max="100"
@@ -229,7 +238,7 @@ function EditorContainer() {
                     <option value='cursive'>cursive</option>
                 </select>
 
-                <span>
+                <span className="controls">
                     <input type="checkbox" id="party" name="party" onClick={handlerParty} ref={partyRef} />
                     <label htmlFor="party">🥳🎉</label>
                 </span>
