@@ -178,6 +178,7 @@ function EditorContainer() {
         partyRef.current.checked = false
         textareaRef.current.value = '';
         studentRef.current.value = '';
+        handlerColorGlow(color, glow)
     }
 
     console.log(partyRef)
