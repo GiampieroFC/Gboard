@@ -37,6 +37,8 @@ body {
 }
 
 .controls:hover {
+    outline: none;
+    border: none;
     border-radius: 15px;
     background: #111418;
     box-shadow: 2px 2px 3px #07080a,
