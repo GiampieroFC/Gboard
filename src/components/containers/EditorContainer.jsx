@@ -193,7 +193,7 @@ function EditorContainer() {
                     ref={studentRef}
                     id="student"
                     autoComplete="on"
-                    placeholder="Nombre del estudiante..."
+                    placeholder="Name..."
                     onChange={(e) => window.localStorage.setItem('student', e.target.value)}
                 />
 
@@ -266,10 +266,10 @@ function EditorContainer() {
             <textarea
                 ref={textareaRef}
                 onChange={save}
-                autoFocus="on"
                 autoCorrect="on"
                 spellCheck
                 autoCapitalize="sentences"
+                placeholder="Write here..."
                 wrap="hard"
             />
         </>

@@ -1,13 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
-    color: '#00ff00',
+    color: '#7bffff',
     fontSize: '18',
     font: 'Courier New, Courier, Lucida Sans Typewriter, Lucida Typewriter, monospace',
     glow: '6'
-    // textContent: '', 👇 guardarlo en el localStorage
-    // format: '.txt', 
-    // student: '',
 }
 
 export const textBoxSlice = createSlice({

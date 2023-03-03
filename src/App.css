@@ -27,7 +27,6 @@ body {
 
 .controls {
     padding: .5em;
-    background-color: transparent;
     color: whitesmoke;
     outline: none;
     border: none;
@@ -37,23 +36,18 @@ body {
         -2px -2px 3px #1b2026;
 }
 
-option {
-    color: black;
-}
-
-
 .controls:hover {
     border-radius: 15px;
-    background: linear-gradient(145deg, #12151a, #0f1216);
+    background: #111418;
     box-shadow: 2px 2px 3px #07080a,
         -2px -2px 3px #1b2026;
 }
 
 .controls:active {
     border-radius: 15px;
-    background: linear-gradient(145deg, #0f1216, #12151a);
-    box-shadow: 2px 2px 3px #07080a,
-        -2px -2px 3px #1b2026;
+    background: #111418;
+    box-shadow: inset 2px 2px 3px #07080a,
+        inset -2px -2px 3px #1b2026;
 }
 
 textarea {
