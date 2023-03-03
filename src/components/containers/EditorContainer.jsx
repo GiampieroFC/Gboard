@@ -159,7 +159,7 @@ function EditorContainer() {
 
                 const genRanHex = () => [...Array(6)].map(() => Math.floor(Math.random() * 16).toString(16)).join('');
                 ((genRanHex) => {
-                    textareaRef.current.style.textShadow = `0px 0px ${100}px #${genRanHex}`
+                    textareaRef.current.style.textShadow = `0px 0px 50px #${genRanHex}`
                     textareaRef.current.style.color = `#${genRanHex}`
                 })(genRanHex())
             }, 250)
@@ -178,7 +178,8 @@ function EditorContainer() {
         partyRef.current.checked = false
         textareaRef.current.value = '';
         studentRef.current.value = '';
-        handlerColorGlow(color, glow)
+        // window.localStorage.clear()
+        // handlerColorGlow(color, glow)
     }
 
     console.log(partyRef)
