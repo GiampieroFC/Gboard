@@ -1,3 +1,7 @@
+* {
+    box-sizing: border-box;
+}
+
 body {
     background-color: #111418;
 }
@@ -18,6 +22,7 @@ body {
     flex-wrap: wrap;
     margin-bottom: 0.5em;
     gap: 0.5em;
+
 }
 
 .controls {
@@ -26,6 +31,10 @@ body {
     color: whitesmoke;
     outline: none;
     border: none;
+    border-radius: 15px;
+    background: #111418;
+    box-shadow: 2px 2px 3px #07080a,
+        -2px -2px 3px #1b2026;
 }
 
 option {
@@ -40,22 +49,30 @@ option {
         -2px -2px 3px #1b2026;
 }
 
+.controls:active {
+    border-radius: 15px;
+    background: linear-gradient(145deg, #0f1216, #12151a);
+    box-shadow: 2px 2px 3px #07080a,
+        -2px -2px 3px #1b2026;
+}
+
 textarea {
-    height: 90%;
-    width: 95%;
+    height: 100%;
+    width: 100%;
     resize: none;
     background: transparent;
     border-color: transparent;
     border-radius: 15px;
+    padding: 15px;
 }
 
 
 textarea:focus {
     outline: none;
-    border-radius: 15px;
+    border-radius: 16px;
     background: #111418;
-    box-shadow: 5px 5px 9px #0d0f12,
-        -5px -5px 9px #15191e;
+    box-shadow: inset 8px 8px 15px #07080a,
+        inset -8px -8px 15px #1b2026;
 }
 
 textarea::-webkit-scrollbar {
