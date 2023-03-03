@@ -174,12 +174,13 @@ function EditorContainer() {
     }
 
     function clean() {
-        clearInterval(nInter.current);
-        partyRef.current.checked = false
         textareaRef.current.value = '';
         studentRef.current.value = '';
-        // window.localStorage.clear()
-        // handlerColorGlow(color, glow)
+
+        clearInterval(nInter.current);
+        partyRef.current.checked = false
+        handlerColorGlow(color, glow)
+
     }
 
     console.log(partyRef)
