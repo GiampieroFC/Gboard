@@ -7,12 +7,12 @@ import { getFirestore, doc, setDoc, deleteDoc } from "firebase/firestore";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-    apiKey: import.meta.env.VITE_API_KEY,
+    apiKey: process.env.VITE_API_KEY,
     authDomain: "gboard-d8c45.firebaseapp.com",
     projectId: "gboard-d8c45",
     storageBucket: "gboard-d8c45.appspot.com",
     messagingSenderId: "132985416664",
-    appId: import.meta.env.VITE_APP_ID
+    appId: process.env.VITE_APP_ID
 };
 
 // Initialize Firebase
