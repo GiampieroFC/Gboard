@@ -19,7 +19,6 @@ specifiers:
 
 dependencies:
   '@reduxjs/toolkit': 1.9.3_k4ae6lp43ej6mezo3ztvx6pykq
-  dotenv: 16.0.3
   firebase: 9.18.0
   js-confetti: 0.11.0
   react: 18.2.0
@@ -32,6 +31,7 @@ devDependencies:
   '@types/react': 18.0.28
   '@types/react-dom': 18.0.11
   '@vitejs/plugin-react': 3.1.0_vite@4.1.4
+  dotenv: 16.0.3
   vite: 4.1.4
   vite-plugin-pwa: 0.14.4_pchkumgzq6po4w4enhsumrku2u
   workbox-window: 6.5.4
@@ -2433,7 +2433,7 @@ packages:
   /dotenv/16.0.3:
     resolution: {integrity: sha512-7GO6HghkA5fYG9TYnNxi14/7K9f5occMlp3zXAuSxn7CKCxt9xbNWG7yF8hTCSUchlfWSe3uLmlPfigevRItzQ==}
     engines: {node: '>=12'}
-    dev: false
+    dev: true
 
   /ejs/3.1.8:
     resolution: {integrity: sha512-/sXZeMlhS0ArkfX2Aw780gJzXSMPnKjtspYZv+f3NiKLlubezAHDU5+9xz6gd3/NhG3txQCo6xlglmTS+oTGEQ==}
