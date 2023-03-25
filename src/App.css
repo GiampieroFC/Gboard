@@ -26,6 +26,7 @@ body {
 }
 
 .controls {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     padding: .5em;
     color: whitesmoke;
     outline: none;
@@ -73,12 +74,6 @@ textarea:focus {
 
 textarea::-webkit-scrollbar {
     width: .6rem;
-
-}
-
-textarea::-webkit-scrollbar- {
-    width: .6rem;
-
 }
 
 textarea::-webkit-scrollbar-thumb {
@@ -88,9 +83,18 @@ textarea::-webkit-scrollbar-thumb {
 }
 
 #font,
-#student,
 #fontSize {
     width: 6rem;
+
+}
+
+#users {
+    width: fit-content;
+    max-width: 9rem;
+}
+
+#student {
+    width: fit-content;
 }
 
 #glow {

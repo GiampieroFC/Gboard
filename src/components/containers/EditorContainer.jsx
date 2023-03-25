@@ -1,19 +1,33 @@
-import { useEffect, useMemo, useRef } from "react"
+import { useEffect, useRef } from "react"
 import { useSelector, useDispatch } from "react-redux";
 import { changeColor, changeFontSize, changeFont, changeGlow } from "../../features/textBox/textBoxSlice.js";
+import { useAuthState, useSignOut } from 'react-firebase-hooks/auth';
+import { useCollection } from 'react-firebase-hooks/firestore';
+import { collection } from 'firebase/firestore';
+import { auth, db, sendDoc, provider, delDoc } from "../../app/firebaseApp.js";
 import JSConfetti from "js-confetti";
+import { signInWithRedirect } from "firebase/auth";
+
 
 const jsConfetti = new JSConfetti()
 
 function EditorContainer() {
 
 
+    const [user] = useAuthState(auth);
+    const [signOut] = useSignOut(auth);
+
+    const [value] = useCollection(collection(db, `${user?.email}`))
+
+
     const { color, fontSize, font, glow } = useSelector((state) => state.textBox)
+
     const textareaRef = useRef()
-    const studentRef = useRef()
+    const newStudentRef = useRef()
     const formatRef = useRef()
     const partyRef = useRef()
     const nInter = useRef(0)
+    const selectRef = useRef()
 
     const dispatch = useDispatch()
 
@@ -21,7 +35,6 @@ function EditorContainer() {
         dispatch(changeColor(color))
         dispatch(changeGlow(glow))
 
-        console.log(glow)
         window.localStorage.setItem('color', color)
         window.localStorage.setItem('glow', glow)
         textareaRef.current.style.textShadow = `0px 0px ${glow}px ${color}`
@@ -44,22 +57,22 @@ function EditorContainer() {
     useEffect(() => {
 
 
-        const textContentStorage = window.localStorage.getItem('textContent')
+        // const textContentStorage = window.localStorage.getItem('textContent')
 
         const colorStorage = window.localStorage.getItem('color')
         const glowStorage = window.localStorage.getItem('glow')
         const fontSizeStorage = window.localStorage.getItem('fontSize')
         const fontStorage = window.localStorage.getItem('font')
-        const studentStorage = window.localStorage.getItem('student')
+        // const studentStorage = window.localStorage.getItem('student')
         const formatStorage = window.localStorage.getItem('format')
 
 
-        if (textContentStorage) {
-            textareaRef.current.value = textContentStorage;
-        }
-        if (studentStorage) {
-            studentRef.current.value = studentStorage;
-        }
+        // if (textContentStorage) {
+        //     textareaRef.current.value = textContentStorage;
+        // }
+        {/*// if (studentStorage) {
+        //     newStudentRef.current.value = studentStorage;
+    // }*/}
         if (formatStorage) {
             formatRef.current.value = formatStorage
         }
@@ -91,7 +104,7 @@ function EditorContainer() {
         const format = formatRef.current.value
 
         const rgx = /[a-z0-9 -]*/ig
-        const student = studentRef.current.value
+        const student = newStudentRef.current.value
             .match(rgx)
             .join('')
             .toLowerCase()
@@ -114,10 +127,28 @@ function EditorContainer() {
         downloadLink.click();
     }
 
-
     function save() {
-        window.localStorage.setItem("student", studentRef.current.value)
+        window.localStorage.setItem("student", newStudentRef.current.value)
         window.localStorage.setItem("textContent", textareaRef.current.value)
+    }
+
+
+    function saveDB() {
+
+
+        if (!newStudentRef.current.value) {
+
+            newStudentRef.current.focus();
+            newStudentRef.current.placeholder = "NEED NAME!";
+            newStudentRef.current.style.textShadow = '0px 0px 20px #FF0000';
+
+        } else {
+
+            sendDoc(user?.email, newStudentRef.current.value.trim(), textareaRef.current.value)
+
+        }
+
+
     }
 
     function handlerWheelFontSize(e) {
@@ -149,19 +180,18 @@ function EditorContainer() {
 
 
         if (partyRef.current.checked) {
+
+
             nInter.current = setInterval(() => {
+
+                const student = newStudentRef.current ? newStudentRef.current.value : '🤷‍♂️'
+
                 jsConfetti.addConfetti({
-                    emojis: ['🤓', '📖', '💃', '🕺', '🎉', '🥳'],
-                    emojiSize: 40,
+                    emojis: ['🤓', '📖', '💃', '🕺', '🎉', '🥳', student],
+                    emojiSize: 60,
                     confettiNumber: 1,
                 })
-
-                const genRanHex = () => [...Array(6)].map(() => Math.floor(Math.random() * 16).toString(16)).join('');
-                ((genRanHex) => {
-                    textareaRef.current.style.textShadow = `0px 0px 50px #${genRanHex}`
-                    textareaRef.current.style.color = `#${genRanHex}`
-                })(genRanHex())
-            }, 250)
+            }, 50)
 
         } else {
             clearInterval(nInter.current)
@@ -174,28 +204,108 @@ function EditorContainer() {
 
     function clean() {
         textareaRef.current.value = '';
-        studentRef.current.value = '';
+
 
         clearInterval(nInter.current);
-        partyRef.current.checked = false
+
+        if (partyRef.current) {
+            partyRef.current.checked = false
+        }
+
         handlerColorGlow(color, glow)
 
     }
 
+    function handlerNew(e) {
+        console.log(e.target.checked)
+        setNewDoc(prev => prev = e.target.checked)
+    }
+
+    function handlerNameAndContent(e) {
+
+        if (e.target.value === 'new') {
+
+            newStudentRef.current.value = ''
+            newStudentRef.current.disabled = false
+            return
+        }
+
+
+        const nameAndContent = value.docs.filter((doc) => doc.id === e.target.value)[0].data()
+
+        console.log(nameAndContent)
+
+        newStudentRef.current.value = '❌ ' + nameAndContent.name + ' 🗑'
+        textareaRef.current.value = nameAndContent.text
+        newStudentRef.current.disabled = true
+    }
+
+    async function handlerDelete() {
+
+        if (selectRef.current.value === 'new') {
+            return
+        }
+        await delDoc(user.email, selectRef.current.value)
+        newStudentRef.current.value = ''
+        newStudentRef.current.disabled = false
+    }
+
+    async function logOut() {
+        signOut(auth)
+        newStudentRef.current.value = ''
+        newStudentRef.current.disabled = false
+    }
 
     return (
         <>
             <div className="controlsContainer">
 
-                <input className="controls"
-                    type="text"
-                    name="student"
-                    ref={studentRef}
+                {/* <label className="controls" htmlFor="new">
+                    {
+                    newDoc 
+                    ? 
+                    'New student' 
+                    : 
+                    'New student?'
+                    }
+                    <input type="checkbox" name="new" id="new" onClick={handlerNew} />
+                </label> */}
+
+
+                {
+                    user
+                    &&
+
+                    <select
+                        id="users"
+                        className="controls"
+                        onChange={handlerNameAndContent}
+                        defaultValue="new"
+                        ref={selectRef}
+                    >
+                        <option value="new">- New doc 📄 -</option>
+                        {
+                            value?.docs.map((doc) => <option value={doc.id} key={doc.id}>
+                                {doc.data().name}
+                            </option>)
+                        }
+                    </select>
+
+
+                }
+
+                <input type="text" name="student"
+                    className="controls"
+                    ref={newStudentRef}
                     id="student"
                     autoComplete="on"
                     placeholder="Name..."
-                    onChange={(e) => window.localStorage.setItem('student', e.target.value)}
+                    onChange={(e) => window.localStorage.setItem('student', e.target.value)
+                    }
+                    onClick={handlerDelete}
+                    disabled={false}
                 />
+
 
                 <label className="controls" htmlFor="fontSize">🔠
                     <input
@@ -239,18 +349,35 @@ function EditorContainer() {
                     <option value='cursive'>cursive</option>
                 </select>
 
-                <span className="controls">
-                    <input type="checkbox" id="party" name="party" onClick={handlerParty} ref={partyRef} />
-                    <label htmlFor="party">🥳🎉</label>
-                </span>
+
 
 
 
                 <button className="controls" onClick={copy}>Copy</button>
 
-                <button className="controls" onClick={save}>Save</button>
+
+                {
+                    user
+                        ?
+                        <>
+                            <span className="controls">
+                                <input type="checkbox" id="party" name="party" onClick={handlerParty} ref={partyRef} />
+                                <label htmlFor="party">🥳🎉</label>
+                            </span>
+
+                            <button className="controls" onClick={saveDB}>Save</button>
+
+                            <button className="controls" onClick={logOut}>log Out</button>
+                        </>
+                        :
+                        <button className="controls" onClick={() => signInWithRedirect(auth, provider)}>log In</button>
+
+                }
+
+
 
                 <button className="controls" onClick={clean}>Clean</button>
+                <button className="controls" onClick={() => console.log("support")}>suport ❤</button>
 
                 <select onChange={(e) => window.localStorage.setItem('format', e.target.value)} className="controls" name="format" ref={formatRef}>
                     <option value=".txt">.txt</option>

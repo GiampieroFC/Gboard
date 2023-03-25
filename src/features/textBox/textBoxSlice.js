@@ -4,7 +4,7 @@ const initialState = {
     color: '#7bffff',
     fontSize: '18',
     font: 'Courier New, Courier, Lucida Sans Typewriter, Lucida Typewriter, monospace',
-    glow: '6'
+    glow: '6',
 }
 
 export const textBoxSlice = createSlice({
