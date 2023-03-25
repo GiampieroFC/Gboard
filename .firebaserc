@@ -1,4 +1,4 @@
-firebase hosting:channel:deploy preview_name{
+{
   "projects": {
     "default": "gboard-d8c45"
   }
