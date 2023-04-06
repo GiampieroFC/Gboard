@@ -1,21 +1,58 @@
 import { useEffect, useRef } from "react"
 import { useSelector, useDispatch } from "react-redux";
 import { changeColor, changeFontSize, changeFont, changeGlow } from "../../features/textBox/textBoxSlice.js";
-import { useAuthState, useSignOut } from 'react-firebase-hooks/auth';
+import { useAuthState, useSignInWithGoogle, useSignOut } from 'react-firebase-hooks/auth';
 import { useCollection } from 'react-firebase-hooks/firestore';
 import { collection } from 'firebase/firestore';
-import { auth, db, sendDoc, provider, delDoc } from "../../app/firebaseApp.js";
+import { auth, db, sendDoc, delDoc } from "../../app/firebaseApp.js";
 import JSConfetti from "js-confetti";
-import { signInWithRedirect } from "firebase/auth";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+
+const provider = new GoogleAuthProvider()
 
 
 const jsConfetti = new JSConfetti()
 
+// function lin() {
+
+
+//     useSignInWithGoogle()
+
+// signInWithRedirect(auth, provider)
+//     .then((result) => {
+//         // This gives you a Google Access Token. You can use it to access the Google API.
+//         const credential = GoogleAuthProvider.credentialFromResult(result);
+//         const token = credential.accessToken;
+//         // The signed-in user info.
+//         const user = result.user;
+//         // IdP data available using getAdditionalUserInfo(result)
+//         // ...
+//     }).catch((error) => {
+//         // Handle Errors here.
+//         const errorCode = error.code;
+//         const errorMessage = error.message;
+//         // The email of the user's account used.
+//         const email = error.customData.email;
+//         // The AuthCredential type that was used.
+//         const credential = GoogleAuthProvider.credentialFromError(error);
+//         // ...
+//     });
+// }
+
 function EditorContainer() {
+
 
 
     const [user] = useAuthState(auth);
     const [signOut] = useSignOut(auth);
+    // const [signInWithGoogle, error] = useSignInWithGoogle(auth);
+
+
+    async function lin() {
+        // signOut()
+        await signInWithPopup(auth, provider)
+
+    }
 
     const [value] = useCollection(collection(db, `${user?.email}`))
 
@@ -142,10 +179,16 @@ function EditorContainer() {
             newStudentRef.current.placeholder = "NEED NAME!";
             newStudentRef.current.style.textShadow = '0px 0px 20px #FF0000';
 
-        } else {
+        }
+
+        if (selectRef.current.value === 'new') {
 
             sendDoc(user?.email, newStudentRef.current.value.trim(), textareaRef.current.value)
 
+        }
+
+        if (selectRef.current.value !== 'new') {
+            sendDoc(user?.email, selectRef.current.value, textareaRef.current.value)
         }
 
 
@@ -370,7 +413,7 @@ function EditorContainer() {
                             <button className="controls" onClick={logOut}>log Out</button>
                         </>
                         :
-                        <button className="controls" onClick={() => signInWithRedirect(auth, provider)}>log In</button>
+                        <button className="controls" onClick={lin}>log In</button>
 
                 }
 
